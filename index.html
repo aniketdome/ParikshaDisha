@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pariksha Disha | Your Exam Guide</title>
+  <meta name="description" content="Discover entrance exams, government recruitment exams, board examinations, application dates, eligibility and official notifications across India.">
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f7fc;
+      color: #17243b;
+    }
+    header {
+      background: #153c78;
+      color: white;
+      padding: 24px 18px;
+      text-align: center;
+    }
+    header h1 { margin: 0 0 8px; font-size: 30px; }
+    header p { margin: 0; line-height: 1.5; }
+    main { max-width: 950px; margin: auto; padding: 22px 15px; }
+    .search {
+      width: 100%;
+      padding: 15px;
+      border: 1px solid #ccd5e4;
+      border-radius: 10px;
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+    h2 { font-size: 22px; }
+    .categories {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 10px;
+    }
+    button {
+      cursor: pointer;
+      border: 0;
+      border-radius: 9px;
+      padding: 13px;
+      font-size: 15px;
+    }
+    .category {
+      background: white;
+      border: 1px solid #dce4f0;
+      color: #153c78;
+      font-weight: bold;
+    }
+    .category.active { background: #153c78; color: white; }
+    #examList {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 14px;
+      margin-top: 18px;
+    }
+    .card {
+      background: white;
+      padding: 18px;
+      border-radius: 12px;
+      border: 1px solid #e0e6f0;
+      box-shadow: 0 3px 12px #17243b0a;
+    }
+    .card h3 { margin-top: 0; }
+    .tag { color: #526785; font-size: 13px; }
+    .details {
+      background: #153c78;
+      color: white;
+      margin-top: 10px;
+      width: 100%;
+    }
+    .secondary {
+      background: #e8effa;
+      color: #153c78;
+      margin-top: 8px;
+      width: 100%;
+    }
+    #message { color: #526785; line-height: 1.6; }
+    footer {
+      background: #102b52;
+      color: white;
+      text-align: center;
+      padding: 24px 12px;
+      margin-top: 35px;
+    }
+    footer strong { display: block; margin-bottom: 7px; }
+    a { color: #174f9c; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🧭 Pariksha Disha</h1>
+    <p>Your direction to examination opportunities across India.</p>
+  </header>
+
+  <main>
+    <h2>Find Your Examination</h2>
+    <input id="search" class="search" type="search"
+      placeholder="Search any exam by name..." aria-label="Search examinations">
+
+    <h2>Explore Exam by Category</h2>
+    <div class="categories" id="categories">
+      <button class="category active" data-category="All">All Exams</button>
+      <button class="category" data-category="Engineering">Engineering</button>
+      <button class="category" data-category="Medical">Medical</button>
+      <button class="category" data-category="University">University Entrance</button>
+      <button class="category" data-category="Design">Design & Architecture</button>
+      <button class="category" data-category="Defence">Defence</button>
+      <button class="category" data-category="Government">Government Jobs</button>
+      <button class="category" data-category="Board">Board Exams</button>
+    </div>
+
+    <h2>Examinations</h2>
+    <p id="message">Search for an exam or choose a category.</p>
+    <div id="examList"></div>
+
+    <h2>Important Information</h2>
+    <p>Application dates, eligibility and examination notices must be
+      verified against the relevant official examination authority.
+      Always check the official website before applying.</p>
+  </main>
+
+  <footer>
+    <strong>ANIKET RAMDAS DOME</strong>
+    Pariksha Disha
+    <p>Helping students discover examination opportunities.</p>
+  </footer>
+
+  <script>
+    const exams = [
+      {name:"JEE Main",category:"Engineering",authority:"National Testing Agency",url:"https://jeemain.nta.nic.in/"},
+      {name:"JEE Advanced",category:"Engineering",authority:"JEE Advanced",url:"https://jeeadv.ac.in/"},
+      {name:"MHT-CET (PCM)",category:"Engineering",authority:"Maharashtra CET Cell",url:"https://cetcell.mahacet.org/"},
+      {name:"NEET UG",category:"Medical",authority:"National Testing Agency",url:"https://neet.nta.nic.in/"},
+      {name:"CUET-UG",category:"University",authority:"National Testing Agency",url:"https://cuet.nta.nic.in/"},
+      {name:"NATA",category:"Design",authority:"Council of Architecture",url:"https://www.nata.in/"},
+      {name:"UCEED",category:"Design",authority:"IIT Bombay",url:"https://www.uceed.iitb.ac.in/"},
+      {name:"NIFT Entrance (NIFTEE)",category:"Design",authority:"National Institute of Fashion Technology",url:"https://exams.nta.ac.in/NIFTEE/"},
+      {name:"NDA/NA",category:"Defence",authority:"Union Public Service Commission",url:"https://upsc.gov.in/"},
+      {name:"UPSC Civil Services",category:"Government",authority:"Union Public Service Commission",url:"https://upsc.gov.in/"},
+      {name:"SSC CGL",category:"Government",authority:"Staff Selection Commission",url:"https://ssc.gov.in/"},
+      {name:"GATE",category:"Engineering",authority:"GATE official portal",url:"https://gate2026.iitg.ac.in/"},
+      {name:"CLAT",category:"University",authority:"Consortium of NLUs",url:"https://consortiumofnlus.ac.in/"},
+      {name:"CBSE Class 10",category:"Board",authority:"Central Board of Secondary Education",url:"https://www.cbse.gov.in/"},
+      {name:"CBSE Class 12",category:"Board",authority:"Central Board of Secondary Education",url:"https://www.cbse.gov.in/"},
+      {name:"Maharashtra HSC",category:"Board",authority:"Maharashtra State Board",url:"https://mahahsscboard.in/"},
+      {name:"Maharashtra SSC",category:"Board",authority:"Maharashtra State Board",url:"https://mahahsscboard.in/"}
+    ];
+
+    let selectedCategory = "All";
+    const search = document.getElementById("search");
+    const list = document.getElementById("examList");
+    const message = document.getElementById("message");
+
+    function render() {
+      const query = search.value.trim().toLowerCase();
+      const results = exams.filter(exam =>
+        (selectedCategory === "All" || exam.category === selectedCategory) &&
+        (exam.name.toLowerCase().includes(query) ||
+         exam.category.toLowerCase().includes(query) ||
+         exam.authority.toLowerCase().includes(query))
+      );
+
+      list.innerHTML = "";
+      message.textContent = results.length
+        ? results.length + " matching examination(s)."
+        : "No matching exam in this starter catalogue. Try another search.";
+
+      results.forEach(exam => {
+        const card = document.createElement("article");
+        card.className = "card";
+        const title = document.createElement("h3");
+        title.textContent = exam.name;
+        const category = document.createElement("p");
+        category.className = "tag";
+        category.textContent = exam.category + " · " + exam.authority;
+        const info = document.createElement("p");
+        info.textContent = "Check the official authority for verified eligibility, application dates and notices.";
+        const link = document.createElement("a");
+        link.href = exam.url;
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        link.textContent = "Official examination website";
+        const button = document.createElement("button");
+        button.className = "details";
+        button.textContent = "View Official Details";
+        button.onclick = () => window.open(exam.url, "_blank", "noopener");
+        card.append(title, category, info, link, button);
+        list.appendChild(card);
+      });
+    }
+
+    search.addEventListener("input", render);
+
+    document.querySelectorAll(".category").forEach(button => {
+      button.addEventListener("click", () => {
+        selectedCategory = button.dataset.category;
+        document.querySelectorAll(".category").forEach(item =>
+          item.classList.toggle("active", item === button)
+        );
+        render();
+      });
+    });
+
+    render();
+  </script>
+</body>
+</html>
